@@ -481,11 +481,13 @@ function populateBrandSelect() {
   // custom menu
   if (menuEl) menuEl.innerHTML = "";
 
-sortAlpha(Object.keys(DATA_SOURCES)).forEach(brand => {
+sortAlpha(BRANDS).forEach(brand => {
+    const available = Boolean(DATA_SOURCES[brand] && Object.keys(DATA_SOURCES[brand]).length);
     // option στο select (state)
     const opt = document.createElement("option");
     opt.value = brand;
     opt.textContent = brand;
+    opt.disabled = !available;
     selectEl.appendChild(opt);
 
     // custom επιλογή στο menu
@@ -494,6 +496,8 @@ sortAlpha(Object.keys(DATA_SOURCES)).forEach(brand => {
       item.type = "button";
       item.className = "brand-option";
       item.dataset.value = brand;
+      item.disabled = !available;
+      item.classList.toggle("brand-option-unavailable", !available);
 
       const logoSpan = document.createElement("span");
       logoSpan.className = "brand-option-logo";
@@ -508,7 +512,14 @@ sortAlpha(Object.keys(DATA_SOURCES)).forEach(brand => {
       item.appendChild(logoSpan);
       item.appendChild(textSpan);
 
-      item.addEventListener("click", () => {
+      if (!available) {
+        const badge = document.createElement("span");
+        badge.className = "brand-availability-badge";
+        badge.textContent = "Σύντομα";
+        item.appendChild(badge);
+      }
+
+      if (available) item.addEventListener("click", () => {
         selectEl.value = brand;
 
         if (buttonLabel) buttonLabel.textContent = brand;

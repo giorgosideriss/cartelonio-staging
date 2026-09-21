@@ -302,11 +302,11 @@
 <div class="vehicle-value-cards">
 <div class="field-block dropdown-card price-dropdown-card">
 <label for="price">
-  Τιμή Οχήματος ΛΤΠΦ
+  Επαληθευμένη ΛΤΠΦ
   <span class="tooltip">?
     <span class="tooltiptext">
-      Συμπληρώνεται αυτόματα αφού επιλέξετε Μάρκα, Χρονολογία, Μοντέλο και Έκδοση.
-      Η ΛΤΠΦ και οι τιμές εξοπλισμού επαληθεύονται με ασφάλεια από τον κατάλογο του Cartelonio.
+      Η ΛΤΠΦ και οι τιμές εξοπλισμού δεν αποστέλλονται στον browser.
+      Επαληθεύονται στον server και εμφανίζονται μετά τον ασφαλή υπολογισμό.
     </span>
   </span>
 </label>
@@ -315,10 +315,7 @@
   <path d="M18 6.2A7 7 0 1 0 18 17.8M5 10h9M5 14h8"></path>
 </svg></span>
   <div class="required-field-wrap" data-field="price">
-    <input id="price" inputmode="decimal" placeholder="0,00" required="" type="text" value=""/>
-    <span aria-hidden="true" class="field-warning">!
-      <span class="field-warning-text">Παρακαλώ συμπληρώστε την Τιμή Οχήματος - ΛΤΠΦ.</span>
-    </span>
+    <input id="price" inputmode="decimal" placeholder="Εμφανίζεται μετά τον υπολογισμό" readonly type="text" value=""/>
   </div>
 </div>
 </div>

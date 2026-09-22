@@ -235,7 +235,7 @@ function cartelonioPublicAssetUrl(value) {
   if (!isGithubStaging) return path;
   const normalized = path.replace(/^\.\//, "").replace(/^\//, "");
   return normalized.startsWith("images/")
-    ? `https://giorgosideriss.github.io/cartelonio/${normalized}`
+    ? `https://raw.githubusercontent.com/giorgosideriss/cartelonio/main/${normalized}`
     : path;
 }
 

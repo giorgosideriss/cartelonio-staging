@@ -174,7 +174,7 @@ function updateVehicleImageIdentity(hasImage = null) {
   const brandLogo = document.getElementById("vehicleImageBrandLogo");
   if (brandLogo) {
     const logoUrl = BRAND_LOGOS[brand] || "";
-    brandLogo.src = logoUrl;
+    brandLogo.src = cartelonioPublicAssetUrl(logoUrl);
     brandLogo.alt = brand ? `${brand} logo` : "";
     brandLogo.style.display = logoUrl ? "block" : "none";
     brandLogo.onerror = () => { brandLogo.style.display = "none"; };
@@ -224,6 +224,23 @@ function formatPriceField() {
   const formatted = formatGreekNumber(input.value, 0, 2);
   if (formatted) input.value = formatted;
 }
+
+// Avoid duplicating the large public image tree in the staging repository.
+// Production keeps using its normal relative asset paths.
+function cartelonioPublicAssetUrl(value) {
+  const path = String(value || "").trim();
+  if (!path || /^(?:https?:)?\/\//i.test(path) || /^(?:data:|blob:)/i.test(path)) return path;
+  const isGithubStaging = window.location.hostname === "giorgosideriss.github.io" &&
+    window.location.pathname.startsWith("/cartelonio-staging/");
+  if (!isGithubStaging) return path;
+  const normalized = path.replace(/^\.\//, "").replace(/^\//, "");
+  return normalized.startsWith("images/")
+    ? `https://giorgosideriss.github.io/cartelonio/${normalized}`
+    : path;
+}
+
+const cartelonioSiteLogo = document.querySelector(".site-logo");
+if (cartelonioSiteLogo) cartelonioSiteLogo.src = cartelonioPublicAssetUrl(cartelonioSiteLogo.getAttribute("src"));
 
 function setRegistrationTaxMiniResult(value) {
   const el = document.getElementById("registrationTaxMiniValue");
@@ -280,7 +297,7 @@ async function updateCarImage() {
       carImage.classList.add("image-unavailable");
       updateVehicleImageIdentity(false);
     };
-    carImage.src = resolvedImage;
+    carImage.src = cartelonioPublicAssetUrl(resolvedImage);
     carImage.alt = `${brand} ${model}${edition?.name ? " - " + edition.name : ""}`;
     updateVehicleImageIdentity(true);
     return;
@@ -1642,7 +1659,7 @@ function historyCurrentImagePath(){
 // page URL (which may change with routes, refreshes or browser navigation).
 function historyImageUrl(path){
  if(typeof path !== 'string' || !path.trim()) return null;
- const value=path.trim().replace(/\\/g,'/');
+ const value=cartelonioPublicAssetUrl(path.trim().replace(/\\/g,'/'));
  if(/^(?:data:|blob:|javascript:)/i.test(value)) return null;
  try {
   const url=/^https?:\/\//i.test(value) ? new URL(value) :
@@ -1698,7 +1715,7 @@ function renderHistoryRecord(record){
  const main=historyNode('div','history-entry-main');
  const titleRow=historyNode('div','history-title-row');
  const logoPath=BRAND_LOGOS[record.brand];
- if(logoPath){const logo=historyNode('img','history-brand-logo');logo.src=logoPath;logo.alt='';logo.loading='lazy';logo.onerror=()=>logo.remove();titleRow.append(logo);}
+ if(logoPath){const logo=historyNode('img','history-brand-logo');logo.src=cartelonioPublicAssetUrl(logoPath);logo.alt='';logo.loading='lazy';logo.onerror=()=>logo.remove();titleRow.append(logo);}
  titleRow.append(historyNode('strong','history-car-name',[record.brand,record.model].filter(Boolean).join(' ') || 'Χειροκίνητη εισαγωγή'));
  main.append(titleRow,
   historyNode('span','history-car-version',[record.year,record.edition].filter(Boolean).join(' · ')),

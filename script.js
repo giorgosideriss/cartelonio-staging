@@ -1249,7 +1249,8 @@ function openAuthModal(view) {
   const modal = authElement("authModal");
   if (!modal) return;
   setAuthStatus();
-  showAuthView(view || (cartelonioSession?.user?.is_anonymous ? "signup" : "user"));
+  const permanentUser = Boolean(cartelonioSession?.user && !cartelonioSession.user.is_anonymous);
+  showAuthView(view || (permanentUser ? "user" : "signup"));
   positionAccountDropdown();
   closeTokensMenu();
   modal.hidden = false;
